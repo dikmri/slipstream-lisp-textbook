@@ -1,0 +1,12 @@
+{
+  "name": "slipstream-lisp-textbook",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.ts",
+    "test": "node scripts/check.ts",
+    "serve": "node scripts/serve.ts"
+  },
+  "engines": { "node": ">=24" }
+}

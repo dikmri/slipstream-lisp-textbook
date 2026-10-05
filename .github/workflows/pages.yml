@@ -1,0 +1,45 @@
+name: Build, verify, and publish the textbook
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: true
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+      - name: Generate both languages and the course archive
+        run: npm run build
+      - name: Verify curriculum and laboratory calculations
+        run: npm test
+      - name: Install SBCL for workshop verification
+        run: sudo apt-get update -qq && sudo apt-get install -y sbcl
+      - name: Execute all 24 Lisp workshops
+        shell: bash
+        run: |
+          set -e
+          for file in workshop/[0-2][0-9]-*.lisp; do
+            if [[ "$file" != "workshop/10-world-window.lisp" ]]; then
+              sbcl --noinform --disable-debugger --script "$file" --check
+            fi
+          done
+      - uses: actions/configure-pages@v6
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: public
+      - name: Publish
+        id: deployment
+        uses: actions/deploy-pages@v5

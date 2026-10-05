@@ -1,0 +1,7 @@
+(load "platform.lisp")
+(dolist (file '("arena.lisp" "view.lisp" "checks.lisp" "main.lisp"))
+  (multiple-value-bind (fasl warnings failure) (compile-file file :output-file (merge-pathnames (make-pathname :name (pathname-name file) :type "fasl") #p"artifacts/"))
+    (declare (ignore warnings))
+    (when failure (error "Compilation failed: ~A" file)) (load fasl)))
+(slipstream:self-test)
+(sb-ext:save-lisp-and-die "dist/Slipstream/Slipstream.exe" :toplevel #'slipstream:main :executable t :application-type :gui :save-runtime-options t)

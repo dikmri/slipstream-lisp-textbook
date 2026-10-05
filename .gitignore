@@ -1,0 +1,9 @@
+node_modules/
+qa/
+game/dist/
+game/artifacts/
+game/vendor/raylib/*.a
+*.fasl
+*.log
+*.pid
+*.tmp

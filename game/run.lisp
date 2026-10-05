@@ -1,0 +1,6 @@
+(load "platform.lisp")
+(load "arena.lisp")
+(load "view.lisp")
+(load "checks.lisp")
+(load "main.lisp")
+(slipstream:main)
