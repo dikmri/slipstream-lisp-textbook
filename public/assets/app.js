@@ -10,6 +10,7 @@ const learned=new Set        ((Array.isArray(storedProgress)?storedProgress:[]).
 const refreshProgress=()=>{all                   ('[data-complete]').forEach(b=>{const yes=learned.has(b.dataset.complete );b.setAttribute('aria-pressed',String(yes));b.textContent=(yes?b.dataset.done:b.dataset.default)+' ✓';});all                   ('.chapter-link').forEach(a=>a.classList.toggle('learned',learned.has(a.dataset.id )));$('#progress-label').textContent=`${learned.size} / 24`;$                     ('#progress').value=learned.size;};
 all                   ('[data-complete]').forEach(b=>b.addEventListener('click',()=>{const id=b.dataset.complete ;learned.has(id)?learned.delete(id):learned.add(id);save('atelier-progress',[...learned]);refreshProgress();}));
 const mounted=new Set        ();
+$('.skip-link').addEventListener('click',e=>{e.preventDefault();$('#reader').focus();});
 function navigate(scroll=true){
   let id=decodeURIComponent(location.hash.slice(1)||'orientation');const chapters=all('.chapter');if(!chapters.some(c=>c.id===id))id='orientation';
   chapters.forEach(c=>c.hidden=c.id!==id);all('.chapter-link').forEach(a=>{const yes=a.dataset.id===id;a.classList.toggle('active',yes);yes?a.setAttribute('aria-current','page'):a.removeAttribute('aria-current');});
